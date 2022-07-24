@@ -30,7 +30,7 @@ export const addExp = async (uname, data) => {
   else if (dformate(date) > dformate("")) alert("Invalid date.");
   else {
     axios
-      .post("http://localhost:3001/getFriend", { username: uname })
+      .post("/getFriend", { username: uname })
       .then((res) => {
         const f = res.data.friends;
         if (f.indexOf(fname) === -1)
@@ -53,7 +53,7 @@ export const addExp = async (uname, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("http://localhost:3001/addExpense", record);
+            axios.post("/addExpense", record);
             record = {
               username: fname,
               friend: uname,
@@ -65,7 +65,7 @@ export const addExp = async (uname, data) => {
               tDate: tDate,
             };
             axios
-              .post("http://localhost:3001/addExpense", record)
+              .post("/addExpense", record)
               .then((res) => {
                 alert("Expense added.");
                 window.location.reload();
@@ -83,7 +83,7 @@ export const addExp = async (uname, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("http://localhost:3001/addExpense", record);
+            axios.post("/addExpense", record);
             record = {
               username: fname,
               friend: uname,
@@ -95,7 +95,7 @@ export const addExp = async (uname, data) => {
               tDate: tDate,
             };
             axios
-              .post("http://localhost:3001/addExpense", record)
+              .post("/addExpense", record)
               .then((res) => {
                 alert("Expense added.");
                 window.location.reload();
@@ -113,7 +113,7 @@ export const addExp = async (uname, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("http://localhost:3001/addExpense", record);
+            axios.post("/addExpense", record);
             record = {
               username: fname,
               friend: uname,
@@ -125,7 +125,7 @@ export const addExp = async (uname, data) => {
               tDate: tDate,
             };
             axios
-              .post("http://localhost:3001/addExpense", record)
+              .post("/addExpense", record)
               .then((res) => {
                 alert("Expense added.");
                 window.location.reload();
@@ -143,7 +143,7 @@ export const addExp = async (uname, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("http://localhost:3001/addExpense", record);
+            axios.post("/addExpense", record);
             record = {
               username: fname,
               friend: uname,
@@ -155,7 +155,7 @@ export const addExp = async (uname, data) => {
               tDate: tDate,
             };
             axios
-              .post("http://localhost:3001/addExpense", record)
+              .post("/addExpense", record)
               .then((res) => {
                 alert("Expense added.");
                 window.location.reload();
@@ -169,7 +169,7 @@ export const addExp = async (uname, data) => {
 export const getSummary = async (data) => {
   let owe = 0;
   let lent = 0;
-  let d = await axios.post("http://localhost:3001/getSummary", data);
+  let d = await axios.post("/getSummary", data);
   d.data.map((e) => {
     if (e.total < 0) owe += e.total;
     else lent += e.total;
@@ -183,11 +183,11 @@ export const getExpTotal = async (data) => {
     alert("Please fill all the details.");
     total = -1;
   } else {
-    const res = await axios.post("http://localhost:3001/getSummary", data);
+    const res = await axios.post("/getSummary", data);
 
     if (res.data.length === 0) {
       await axios
-        .post("http://localhost:3001/getFriend", { username: data.username })
+        .post("/getFriend", { username: data.username })
         .then((res) => {
           const f = res.data.friends;
           if (f.indexOf(data.friend) === -1) {
@@ -226,7 +226,7 @@ export const settleExp = async (data, amount) => {
     tID: tID,
     tDate: tDate,
   };
-  await axios.post("http://localhost:3001/addExpense", record);
+  await axios.post("/addExpense", record);
 
   record = {
     username: fname,
@@ -238,7 +238,7 @@ export const settleExp = async (data, amount) => {
     tID: tID,
     tDate: tDate,
   };
-  await axios.post("http://localhost:3001/addExpense", record).then((res) => {
+  await axios.post("/addExpense", record).then((res) => {
     if (res.data === 1) {
       alert("Settled up with ".concat(fname).concat("."));
       window.location.reload();
@@ -247,7 +247,7 @@ export const settleExp = async (data, amount) => {
 };
 
 export const getSummaryFriend = async (data)=>{
-  const res = await axios.post("http://localhost:3001/getSummary", data);
+  const res = await axios.post("/getSummary", data);
   let lent = [];
   let owe = [];
   res.data.map((e) => {

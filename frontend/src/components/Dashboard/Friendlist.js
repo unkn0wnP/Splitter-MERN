@@ -8,7 +8,7 @@ export default function Friendlist() {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/getFriend", { username: uname })
+      .post("/getFriend", { username: uname })
       .then((res) => {
         setfriends(res.data.friends);
       });
