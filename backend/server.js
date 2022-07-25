@@ -12,10 +12,10 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3001
 
-// app.use(express.static(path.resolve(__dirname, "../frontend/build")));
-// app.get("*", (request, response) => {
-//   response.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
-// });
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+app.get("*", (request, response) => {
+  response.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
 
 mongoose.connect(
   process.env.MONGODB_CONNECTION_STRING

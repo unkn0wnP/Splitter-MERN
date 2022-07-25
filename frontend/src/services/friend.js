@@ -6,7 +6,7 @@ export const sendR = async (data) => {
     if (fname === "") alert("Please enter the name.");
     else {
       axios
-        .post("http://localhost:3001/getFriend", { username: uname })
+        .post("/getFriend", { username: uname })
         .then((res) => {
           const f = res.data.friends;
           const p = res.data.pending;
@@ -16,7 +16,7 @@ export const sendR = async (data) => {
             alert(fname.concat(" has already sent you a friend request."));
           else {
             axios
-              .post("http://localhost:3001/checkUser", {
+              .post("/checkUser", {
                 username: fname,
               })
               .then((res1) => {
@@ -26,7 +26,7 @@ export const sendR = async (data) => {
                   );
                 else {
                   axios
-                    .post("http://localhost:3001/getFriend", { username: fname })
+                    .post("/getFriend", { username: fname })
                     .then((res2) => {
                       let p1 = res2.data.pending;
                       if (p1.indexOf(uname) !== -1)
@@ -38,7 +38,7 @@ export const sendR = async (data) => {
                       else {
                         p1.push(uname);
                         axios
-                          .post("http://localhost:3001/sendReq", {
+                          .post("/sendReq", {
                             fname: fname,
                             pending: p1,
                           })
@@ -59,14 +59,14 @@ export const sendR = async (data) => {
   
   export const addF = async (uname, fname) => {
     axios
-      .post("http://localhost:3001/getFriend", { username: uname })
+      .post("/getFriend", { username: uname })
       .then((res) => {
         let f = res.data.friends;
         let p = res.data.pending;
         f.push(fname);
         p.pop(fname);
         axios
-          .post("http://localhost:3001/updateFriend", {
+          .post("/updateFriend", {
             username: uname,
             friends: f,
             pending: p,
@@ -74,12 +74,12 @@ export const sendR = async (data) => {
           .then((res1) => {
             if (res1.data === 1) {
               axios
-                .post("http://localhost:3001/getFriend", { username: fname })
+                .post("/getFriend", { username: fname })
                 .then((res2) => {
                   let f1 = res2.data.friends;
                   f1.push(uname);
                   axios
-                    .post("http://localhost:3001/updateFriend", {
+                    .post("/updateFriend", {
                       username: fname,
                       friends: f1,
                     })

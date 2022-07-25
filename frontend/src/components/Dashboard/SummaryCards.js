@@ -30,7 +30,7 @@ export default function Summary() {
             </div>
             <div className="d-flex justify-content-center">
               <div className="d-flex flex-row align-items-center mt-2 fs-3">
-                <b>{lent}</b>
+                <b>&#8377;{lent}</b>
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@ export default function Summary() {
             </div>
             <div className="d-flex justify-content-center">
               <div className="d-flex flex-row align-items-center mt-2 fs-3">
-                <b>{lent+owe}</b>
+                <b>&#8377;{lent+owe}</b>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function Summary() {
             </div>
             <div className="d-flex justify-content-center">
               <div className="d-flex flex-row align-items-center mt-2 fs-3">
-                <b>{-owe}</b>
+                <b>&#8377;{-owe}</b>
               </div>
             </div>
           </div>

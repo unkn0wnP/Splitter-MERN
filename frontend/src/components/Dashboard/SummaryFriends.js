@@ -38,7 +38,7 @@ export default function SummaryFriends() {
                   return (
                     <tr key={i}>
                       <th>{l._id.friend}</th>
-                      <th style={{ color: "#399e83" }}>{l.total}</th>
+                      <th style={{ color: "#399e83" }}>&#8377;{l.total}</th>
                     </tr>
                   );
                 })}
@@ -61,7 +61,7 @@ export default function SummaryFriends() {
                     <tr key={i}>
                       <th>{o._id.friend}</th>
                       <th>
-                        <div style={{ color: "#fc5c38" }}>{-o.total}</div>
+                        <div style={{ color: "#fc5c38" }}>&#8377;{-o.total}</div>
                       </th>
                     </tr>
                   );

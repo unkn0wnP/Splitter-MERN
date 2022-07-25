@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardMain from "./DashboardMain";
+import ExpenseList from "./ExpenseList";
 import Friends from "./Friends";
 import Navbar from "./Navbar";
 
@@ -10,7 +11,7 @@ export default function Dashboard() {
       <Navbar username={uname} />
 
       <div className="container-fluid">
-        <div className="col-sm-3 text-dark pt-5" style={{ float: "left",minHeight: 600  }}>
+        <div className="col-sm-3 text-dark pt-5 border-end" style={{ float: "left"}}>
           <div className="mt-1 mx-3 pe-2">
             <Friends />
           </div>
@@ -21,8 +22,8 @@ export default function Dashboard() {
         >
           <DashboardMain/>
         </div>
-        <div className="col-sm-3" style={{ float: "left",minHeight: 600 }}>
-          hello
+        <div className="col-sm-3 text-dark border-start" style={{ float: "left"}}>
+          <ExpenseList/>
         </div>
       </div>
     </>
