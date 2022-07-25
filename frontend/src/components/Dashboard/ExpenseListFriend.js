@@ -1,7 +1,12 @@
 import React from "react";
+import { deleteExp } from "../../services/expense";
 
 export default function ExpenseList(props) {
   const data = props.data;
+
+  const handleDelete = (e)=>{
+    deleteExp({tID : e.target.value});
+  }
 
   const month = {
     "01": "JAN",
@@ -70,7 +75,7 @@ export default function ExpenseList(props) {
                       )
                     )}
                   </div>
-                  <div className="col-1 my-auto">x</div>
+                  <div className="col-1 my-auto"><button type="button" class="btn-close btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete expense" onClick={handleDelete} value={e.tID}/></div>
                 </tr>
               );
             })}

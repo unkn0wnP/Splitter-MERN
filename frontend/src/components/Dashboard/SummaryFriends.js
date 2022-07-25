@@ -25,48 +25,50 @@ export default function SummaryFriends() {
       </div>
       <div className="row mt-3">
         <div className="col">
-          <table class="table table-hover">
-            <tr>
-              <th>By</th>
-              <th>Amount</th>
-            </tr>
-            <tbody>
-              {lent.map((l, i) => {
-                return (
-                  <tr key={i}>
-                    <th>
-                      {l._id.friend}
-                    </th>
-                    <th style={{ color: "#399e83" }}>
-                      {l.total}
-                    </th>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          {lent.length === 0 ? (
+            <div className="text-start fs-5">{"Noone owes you."}</div>
+          ) : (
+            <table className="table table-hover">
+              <tr>
+                <th>By</th>
+                <th>Amount</th>
+              </tr>
+              <tbody>
+                {lent.map((l, i) => {
+                  return (
+                    <tr key={i}>
+                      <th>{l._id.friend}</th>
+                      <th style={{ color: "#399e83" }}>{l.total}</th>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
         <div className="col">
-        <table class="table table-hover">
-            <tr>
-              <th>To</th>
-              <th>Amount</th>
-            </tr>
-            <tbody>
-              {owe.map((o, i) => {
-                return (
-                  <tr key={i}>
-                    <th>{o._id.friend}</th>
-                    <th>
-                      <div style={{ color: "#fc5c38" }}>
-                        {-o.total}
-                      </div>
+          {owe.length === 0 ? (
+            <div className="text-end fs-5">{"You don't owe anyone."}</div>
+          ) : (
+            <table className="table table-hover">
+              <tr>
+                <th>To</th>
+                <th>Amount</th>
+              </tr>
+              <tbody>
+                {owe.map((o, i) => {
+                  return (
+                    <tr key={i}>
+                      <th>{o._id.friend}</th>
+                      <th>
+                        <div style={{ color: "#fc5c38" }}>{-o.total}</div>
                       </th>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

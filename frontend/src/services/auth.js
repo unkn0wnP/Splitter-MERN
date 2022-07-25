@@ -18,11 +18,11 @@ export const authRegister = async (data, showAlert) => {
     showAlert("Confirm password must be same.", "danger");
   else {
     axios
-      .post("/checkUser", { username: data.username })
+      .post("http://localhost:3001/checkUser", { username: data.username })
       .then((res) => {
         if (res.data.result === 0) {
           axios
-            .post("/checkUser", { email: data.email })
+            .post("http://localhost:3001/checkUser", { email: data.email })
             .then((res1) => {
               if (res1.data.result === 0) {
                 const udata = {
@@ -33,15 +33,15 @@ export const authRegister = async (data, showAlert) => {
                   password: data.pass,
                 };
                 axios
-                  .post("/addUser", udata)
+                  .post("http://localhost:3001/addUser", udata)
                   .then((res) => {
                     localStorage.setItem("username", data.username);
                     axios
-                      .post("/createFriendDoc", {
+                      .post("http://localhost:3001/createFriendDoc", {
                         username: data.username,
                       })
                       .then((res) => {
-                        window.location.href = "/dashboard";
+                        window.location.href = "http://localhost:3001/dashboard";
                       });
                   });
               } else if (res1.data.result === -1)
@@ -61,7 +61,7 @@ export const authLogin = async (data, showAlert) => {
     showAlert("Please fill all the details.", "danger");
   else {
     axios
-      .post("/getPass", { username: data.username })
+      .post("http://localhost:3001/getPass", { username: data.username })
       .then((res1) => {
         if (res1.data === " error")
           showAlert("Oops! Something went worng", "danger");
@@ -70,7 +70,7 @@ export const authLogin = async (data, showAlert) => {
         else {
           if (data.pass === res1.data) {
             localStorage.setItem("username", data.username);
-            window.location.href = "/dashboard";
+            window.location.href = "http://localhost:3001/dashboard";
           } else showAlert("Incorrect password.", "danger");
         }
       });
