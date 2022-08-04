@@ -42,6 +42,7 @@ export default function FriendDetail() {
   };
 
   const handleSubmitExp = () => {
+    seteformvalue({...eformvalue,[fname]:fname.friendID})
     addExp(username, eformvalue);
   };
 
@@ -75,13 +76,13 @@ export default function FriendDetail() {
   const [expense, setexpense] = useState([]);
   useEffect(() => {
     axios
-      .post("http://localhost:3001/getFriend", { username: username })
+      .post("/getFriend", { username: username })
       .then((res) => {
         const f = res.data.friends;
         if (f.indexOf(fname.friendID) === -1) window.location.href = "/error";
         else {
           axios
-            .post("http://localhost:3001/getExpenseInfo", {
+            .post("/getExpenseInfo", {
               username: username,
               friend: fname.friendID,
             })
