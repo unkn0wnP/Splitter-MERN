@@ -42,8 +42,7 @@ export default function FriendDetail() {
   };
 
   const handleSubmitExp = () => {
-    console.log(fname.friendID)
-    seteformvalue({...eformvalue,[fname]:fname.friendID})
+    eformvalue.fname = fname.friendID;
     addExp(username, eformvalue);
   };
 
@@ -142,6 +141,7 @@ export default function FriendDetail() {
         </div>
       </div>
       <Dialog open={eopen}>
+        
         <DialogTitle style={{ backgroundColor: "#4bccaa" }}>
           <b>Add an expense</b>
         </DialogTitle>
