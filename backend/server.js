@@ -10,16 +10,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 app.get("*", (request, response) => {
   response.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
-mongoose.connect(
-  process.env.MONGODB_CONNECTION_STRING
-);
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 
 app.post("/addUser", async (req, res) => {
   const data = req.body;
@@ -36,7 +34,7 @@ app.post("/checkUser", async (req, res) => {
   });
 });
 
-app.post("/getPass", (req, res) => {
+app.post("/getInfo", (req, res) => {
   const uname = req.body;
   model.User.findOne(uname, (err, result) => {
     if (err) {
@@ -44,7 +42,7 @@ app.post("/getPass", (req, res) => {
     } else if (result === null) {
       res.json("No user found.");
     } else {
-      res.json(result.password);
+      res.json(result);
     }
   });
 });
@@ -89,6 +87,15 @@ app.post("/updateFriend", async (req, res) => {
   });
 });
 
+app.post("/updateUser", async (req, res) => {
+  const username = req.body.username;
+  const update = { $set: req.body };
+  model.User.updateOne({ username: username }, update, (err, result) => {
+    if (err) res.json(-1);
+    else res.json(1);
+  });
+});
+
 app.post("/addExpense", async (req, res) => {
   const data = req.body;
   const newExp = new model.Expense(data);
@@ -104,18 +111,16 @@ app.post("/getExpenseInfo", async (req, res) => {
 app.post("/getSummary", async (req, res) => {
   const data = await model.Expense.aggregate([
     { $match: req.body },
-    { $group: { _id: {friend :"$friend"}, total: { $sum: "$amount" } } },
+    { $group: { _id: { friend: "$friend" }, total: { $sum: "$amount" } } },
   ]);
   res.json(data);
 });
 
-app.post("/deleteExp", async (req,res)=>{
+app.post("/deleteExp", async (req, res) => {
   const data = await model.Expense.deleteMany(req.body);
-  if(data.deletedCount === 2)
-  res.json("Deleted")
-  else
-  res.json(-1);
-})
+  if (data.deletedCount === 2) res.json("Deleted");
+  else res.json(-1);
+});
 
 app.listen(PORT, () => {
   console.log("Server is running...");

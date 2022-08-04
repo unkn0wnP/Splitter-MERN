@@ -61,14 +61,14 @@ export const authLogin = async (data, showAlert) => {
     showAlert("Please fill all the details.", "danger");
   else {
     axios
-      .post("/getPass", { username: data.username })
+      .post("/getInfo", { username: data.username })
       .then((res1) => {
-        if (res1.data === " error")
+        if (res1.data === "error")
           showAlert("Oops! Something went worng", "danger");
         else if (res1.data === "No user found.")
           showAlert("User doesn't exist.", "danger");
         else {
-          if (data.pass === res1.data) {
+          if (data.pass === res1.data.password) {
             localStorage.setItem("username", data.username);
             window.location.href = "/dashboard";
           } else showAlert("Incorrect password.", "danger");
