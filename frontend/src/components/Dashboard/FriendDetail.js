@@ -42,7 +42,6 @@ export default function FriendDetail() {
   };
 
   const handleSubmitExp = () => {
-    fname = useParams();
     seteformvalue({...eformvalue,[fname]:fname.friendID})
     addExp(username, eformvalue);
   };
