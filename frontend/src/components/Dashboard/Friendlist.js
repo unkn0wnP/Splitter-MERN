@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { getFriendData } from "../../services/friend";
 import { Link } from "react-router-dom";
 
 export default function Friendlist() {
@@ -7,12 +8,12 @@ export default function Friendlist() {
   const [friends, setfriends] = useState([]);
 
   useEffect(() => {
-    axios
-      .post("/getFriend", { username: uname })
-      .then((res) => {
-        setfriends(res.data.friends);
-      });
-  }, [uname]);
+    const getData = async ()=>{
+     const res = await getFriendData(uname);
+     res && setfriends(res.friends);
+    }
+    getData();
+   }, [uname]);
 
   const mouserover = (e) => {
     e.target.style.backgroundColor = "#dbdbdb";

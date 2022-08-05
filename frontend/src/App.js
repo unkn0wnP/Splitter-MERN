@@ -12,7 +12,7 @@ import Error from "./components/Error";
 function App() {
   return (
     <>
-    {/*Note(Chnages during using localhost) :  Services, Friendlist, FriendDetail */}
+    {/*Note(Chnages during using localhost) :  Services, FriendDetail */}
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

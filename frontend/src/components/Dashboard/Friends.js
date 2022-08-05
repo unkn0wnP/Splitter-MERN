@@ -1,8 +1,19 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { Link, Outlet } from "react-router-dom";
+import { getFriendData } from "../../services/friend";
 import Friendlist from "./Friendlist";
 
 export default function Friends() {
+  const uname = localStorage.getItem("username");
+  const [req, setreq] = useState([]);
+
+  useEffect(() => {
+   const getData = async ()=>{
+    const res = await getFriendData(uname);
+    res && setreq(res.pending);
+   }
+   getData();
+  }, [uname]);
   return (
     <>
       <div
@@ -30,7 +41,7 @@ export default function Friends() {
         <div className="col">
         <Link to="/dashboard/pendingRequest">
           <button type="button" className="btn btn-outline-danger btn-sm px-4">
-            Pending Requests
+            Pending Requests({req.length})
           </button>
           </Link>
         </div>

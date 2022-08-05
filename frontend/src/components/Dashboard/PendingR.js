@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import {addF} from "../../services/friend";
+import {addF, getFriendData} from "../../services/friend";
 
 export default function PendingR() {
   const uname = localStorage.getItem("username");
   const [req, setreq] = useState([]);
 
   useEffect(() => {
-    axios
-      .post("http://localhost:3001/getFriend", { username: uname })
-      .then((res) => {
-        setreq(res.data.pending);
-      });
+   const getData = async ()=>{
+    const res = await getFriendData(uname);
+    res && setreq(res.pending);
+   }
+   getData();
   }, [uname]);
 
   const handleClose = () => {
@@ -31,7 +30,7 @@ export default function PendingR() {
       >
         <button
           type="button"
-          class="btn-close"
+          className="btn-close"
           aria-label="Close"
           onClick={handleClose}
         />
@@ -52,7 +51,7 @@ export default function PendingR() {
                     <td>
                       <button
                         type="button"
-                        class="btn btn-outline-info btn-sm"
+                        className="btn btn-outline-info btn-sm"
                         onClick={handleAccept}
                         value={f}
                       >
