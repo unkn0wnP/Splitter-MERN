@@ -8,6 +8,7 @@ import AddF from "./components/Dashboard/AddF";
 import PendingR from "./components/Dashboard/PendingR";
 import FriendDetail from "./components/Dashboard/FriendDetail";
 import Error from "./components/Error";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           </Route>
           <Route path="/profile" element={<Profile />} />
           <Route path="/error" element={<Error />} />
+          <Route path="*" element={<PageNotFound />}/>
         </Routes>
       </Router>
     </>
