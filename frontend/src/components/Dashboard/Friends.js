@@ -3,17 +3,19 @@ import { Link, Outlet } from "react-router-dom";
 import { getFriendData } from "../../services/friend";
 import Friendlist from "./Friendlist";
 
-export default function Friends() {
-  const uname = localStorage.getItem("username");
+export default function Friends(props) {
   const [req, setreq] = useState([]);
+
+  const token = props.token
+  const username = props.username
 
   useEffect(() => {
    const getData = async ()=>{
-    const res = await getFriendData(uname);
+    const res = await getFriendData(token);
     res && setreq(res.pending);
    }
    getData();
-  }, [uname]);
+  }, [token]);
   return (
     <>
       <div
@@ -27,7 +29,7 @@ export default function Friends() {
         </div>
 
         <div className="mt-1">
-          <Friendlist />
+          <Friendlist token={token}/>
         </div>
       </div>
       <div className="row mt-4 mb-3">
@@ -47,7 +49,7 @@ export default function Friends() {
         </div>
       </div>
       <div className="mt-4">
-        <Outlet/>
+        <Outlet context={[token,username]}/>
       </div>
     </>
   );

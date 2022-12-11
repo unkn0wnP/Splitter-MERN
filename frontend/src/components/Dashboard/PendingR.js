@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
-import {addF, getFriendData} from "../../services/friend";
+import { useOutletContext } from "react-router-dom";
+import {addFriend, getFriendData} from "../../services/friend";
 
 export default function PendingR() {
-  const uname = localStorage.getItem("username");
+  const [token,username] = useOutletContext()
   const [req, setreq] = useState([]);
 
   useEffect(() => {
    const getData = async ()=>{
-    const res = await getFriendData(uname);
+    const res = await getFriendData(token);
     res && setreq(res.pending);
    }
    getData();
-  }, [uname]);
+  }, []);
 
   const handleClose = () => {
     window.location.href = "/dashboard";
   };
 
   const handleAccept = (e) => {
-    const fname = e.target.value;
-    addF(uname, fname);
+    const friend = e.target.value;
+    addFriend(token,username, friend);
   };
 
   return (

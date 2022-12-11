@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react";
 import { getFriendData } from "../../services/friend";
 import { Link } from "react-router-dom";
 
-export default function Friendlist() {
-  const uname = localStorage.getItem("username");
+export default function Friendlist(props) {
   const [friends, setfriends] = useState([]);
 
   useEffect(() => {
     const getData = async ()=>{
-     const res = await getFriendData(uname);
+     const res = await getFriendData(props.token);
      res && setfriends(res.friends);
     }
     getData();
-   }, [uname]);
+   }, [props.token]);
 
   const mouserover = (e) => {
     e.target.style.backgroundColor = "#dbdbdb";

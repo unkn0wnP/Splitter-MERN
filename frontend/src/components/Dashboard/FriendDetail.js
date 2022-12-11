@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useOutletContext, useParams } from "react-router-dom";
 import ExpenseListFriend from "./ExpenseListFriend";
-import { addExp, getExpTotal, settleExp } from "../../services/expense";
+import { addExp, getExp, getExpTotal, settleExp } from "../../services/expense";
 import {
   Dialog,
   DialogActions,
@@ -14,17 +13,18 @@ import {
   Select,
   MenuItem,
 } from "@material-ui/core";
+import { isFriend } from "../../services/friend";
 
 export default function FriendDetail() {
   const fname = useParams();
-  const username = localStorage.getItem("username");
+  const [token, username] = useOutletContext();
 
   const handleClose = () => {
     window.location.href = "/dashboard";
   };
 
   const defaulteformvalue = {
-    fname: fname.friendID,
+    friend: fname.friendID,
     amount: 0,
     option: "Paid by you and Split equaly.",
     discription: "",
@@ -43,55 +43,38 @@ export default function FriendDetail() {
 
   const handleSubmitExp = () => {
     eformvalue.fname = fname.friendID;
-    addExp(username, eformvalue);
+    addExp(token, eformvalue);
   };
 
   const handleSettle = () => {
     const getTotal = async () => {
-      const total = await getExpTotal({
-        username: username,
-        friend: fname.friendID
-      });
+      const total = await getExpTotal(token, { friend: fname.friendID });
       total && setamount(total);
       if (total === 0) {
         alert(
-          "You are already settled up with "
-            .concat(fname.friendID)
-            .concat(".")
+          "You are already settled up with ".concat(fname.friendID).concat(".")
         );
-        
-      }
-      else
-      setsopen(true);
+      } else setsopen(true);
     };
     getTotal();
   };
 
   const handleSubmitSettle = () => {
-    settleExp({ username: username, friend: fname.friendID }, amount);
+    settleExp(token, { username: username, friend: fname.friendID }, amount);
   };
 
-  
-
   const [expense, setexpense] = useState([]);
+
   useEffect(() => {
-    axios
-      .post("/getFriend", { username: username })
-      .then((res) => {
-        const f = res.data.friends;
-        if (f.indexOf(fname.friendID) === -1) window.location.href = "/error";
-        else {
-          axios
-            .post("/getExpenseInfo", {
-              username: username,
-              friend: fname.friendID,
-            })
-            .then((res1) => {
-              setexpense(res1.data.data);
-            });
-        }
-      });
-  }, [fname.friendID, username]);
+    const check = async () => {
+      seteformvalue({ ...eformvalue, ["username"]: username });
+
+      await isFriend(token, fname.friendID);
+      const res1 = await getExp(token, { friend: fname.friendID });
+      res1 && setexpense(res1);
+    };
+    check();
+  }, [fname.friendID, token, username]);
 
   return (
     <>
@@ -112,9 +95,6 @@ export default function FriendDetail() {
         </div>
 
         <div className="mt-3 ms-2">
-          <b>Recent Expenses</b>
-        </div>
-        <div className="mt-3">
           <div className="row mb-3">
             <div className="col-7">
               <button
@@ -137,11 +117,13 @@ export default function FriendDetail() {
               </button>
             </div>
           </div>
-          <ExpenseListFriend data={expense} />
+          <div className="mt-3 mb-2 ms-1">
+            <b>Recent Expenses</b>
+          </div>
+          <ExpenseListFriend data={expense} token={token} />
         </div>
       </div>
       <Dialog open={eopen}>
-        
         <DialogTitle style={{ backgroundColor: "#4bccaa" }}>
           <b>Add an expense</b>
         </DialogTitle>
@@ -213,13 +195,13 @@ export default function FriendDetail() {
       </Dialog>
 
       <Dialog open={sopen}>
-        <DialogTitle style={{ backgroundColor: "#4bccaa",width:250 }}>
+        <DialogTitle style={{ backgroundColor: "#4bccaa", width: 250 }}>
           <b>Settle Up</b>
         </DialogTitle>
 
         <DialogContent style={{ marginTop: 10 }}>
           <DialogContentText>
-            With{" "}<b>{fname.friendID}</b>
+            With <b>{fname.friendID}</b>
           </DialogContentText>
           <DialogContentText>
             {amount < 0
@@ -228,20 +210,20 @@ export default function FriendDetail() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={handleSubmitSettle}
-              style={{ backgroundColor: "#fc5c38" }}
-            >
-              Settle
-            </Button>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleSubmitSettle}
+            style={{ backgroundColor: "#fc5c38" }}
+          >
+            Settle
+          </Button>
           <Button
             variant="contained"
             size="small"
             onClick={() => {
               setsopen(false);
-              setamount(0)
+              setamount(0);
             }}
           >
             Cancel

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {getSummary} from "../../services/expense"
 
-export default function Summary() {
-  const username = localStorage.getItem("username");
+export default function Summary(props) {
   const [lent, setlent] = useState(0);
   const [owe, setowe] = useState(0);
   useEffect(() => {
     let data = []
     const getData = async ()=>{
-      data =  await getSummary({username:username})
+      data =  await getSummary(props.token,{})
       data  && setlent(data.lent)
       data && setowe(data.owe)
     }

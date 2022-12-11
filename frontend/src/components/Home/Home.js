@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 
 export default function Home() {
+
+  const token = localStorage.getItem("splitterToken")
+
   useEffect(() => {
-    if(localStorage.getItem("username"))
+    if(token)
     window.location.href = "/dashboard"
   
   }, [])

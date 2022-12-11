@@ -7,7 +7,7 @@ export default function Login(props) {
   const [pass, setpass] = useState("");
 
   const validateLogin = () => {
-    authLogin({ username: username, pass: pass }, props.showAlert);
+    authLogin({ username: username, password: pass }, props.showAlert);
   };
 
   return (

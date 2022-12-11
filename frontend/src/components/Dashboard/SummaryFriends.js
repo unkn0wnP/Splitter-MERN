@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { getSummaryFriend } from "../../services/expense";
 
-export default function SummaryFriends() {
-  const username = localStorage.getItem("username");
+export default function SummaryFriends(props) {
   const [owe, setowe] = useState([]);
   const [lent, setlent] = useState([]);
   useEffect(() => {
     const getData = async () => {
-      const res = await getSummaryFriend({ username: username });
+      const res = await getSummaryFriend(props.token,{});
       res && setowe(res.owe);
       res && setlent(res.lent);
     };
     getData();
-  }, [username]);
+  }, []);
   return (
     <div className="card p-3 m-4 shadow" style={{ borderRadius: 10 }}>
       <div className="row p-2 text-secondary">

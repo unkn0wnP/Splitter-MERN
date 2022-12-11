@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar(props) {
   const handlelogout = () => {
-    localStorage.removeItem("username");
+    localStorage.removeItem("splitterToken");
     window.location.href = "/";
   };
   return (

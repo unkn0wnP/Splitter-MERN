@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import SummaryCards from "./SummaryCards";
 import { addExp, getExpTotal, settleExp } from "../../services/expense";
 import {
@@ -14,8 +14,7 @@ import {
 } from "@material-ui/core";
 import SummaryFriends from "./SummaryFriends";
 
-export default function DashboardMain() {
-  const uname = localStorage.getItem("username");
+export default function DashboardMain(props) {
 
   const defaulteformvalue = {
     fname: "",
@@ -34,13 +33,20 @@ export default function DashboardMain() {
   const [next, setnext] = useState(true);
   const [amount, setamount] = useState(0);
 
+  useEffect(() => {
+    const check = async () => {
+      seteformvalue({ ...eformvalue, ["username"]: props.username });
+    };
+    check();
+  }, [props.username]);
+
   const handleInputExpense = (e) => {
     const { name, value } = e.target;
     seteformvalue({ ...eformvalue, [name]: value });
   };
 
   const handleSubmitExp = () => {
-    addExp(uname, eformvalue);
+    addExp(props.token, eformvalue);
   };
 
   const handleInputSettle = (e) => {
@@ -51,8 +57,7 @@ export default function DashboardMain() {
 
   const handlenext = () => {
     const getTotal = async () => {
-      const total = await getExpTotal({
-        username: uname,
+      const total = await getExpTotal(props.token,{
         friend: sformvalue.fname.trim(),
       });
       total && setamount(total);
@@ -71,7 +76,7 @@ export default function DashboardMain() {
   };
 
   const handleSubmitSettle = () => {
-    settleExp({ username: uname, friend: sformvalue.fname }, amount);
+    settleExp(props.token,{ username: props.username, friend: sformvalue.fname }, amount);
   };
 
   const [eopen, seteopen] = useState(false);
@@ -112,10 +117,10 @@ export default function DashboardMain() {
         </div>
       </div>
       <div>
-        <SummaryCards />
+        <SummaryCards token={props.token}/>
       </div>
       <div>
-        <SummaryFriends />
+        <SummaryFriends token={props.token} />
       </div>
 
       <Dialog open={eopen}>

@@ -13,7 +13,7 @@ import PageNotFound from "./components/PageNotFound";
 function App() {
   return (
     <>
-    {/*Note(Chnages during using localhost) :  Services, FriendDetail */}
+    {/*Note(Chnages during using localhost) :  Services*/}
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

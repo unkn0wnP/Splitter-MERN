@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { sendR } from "../../services/friend";
+import { sendRequest } from "../../services/friend";
+import { useOutletContext } from "react-router-dom";
 
 export default function AddF() {
-  const uname = localStorage.getItem("username");
+  const [token, username] = useOutletContext();
+
   const [fname, setfname] = useState("");
 
   const handleAdd = ()=>{
-    sendR({username:uname,fname:fname});
+    sendRequest(token,{username:username,friend:fname});
   }
 
   const handleClose = ()=>{

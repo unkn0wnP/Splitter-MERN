@@ -1,20 +1,18 @@
 const axios = require("axios");
 
-export const getCurrentDetails = async (uname) => {
-  const res = await axios.post("/getInfo", {
-    username: uname,
+export const getProfile = async (token) => {
+  const res = await axios.get("/profile", {
+    headers: { Authorization: "Bearer " + token },
   });
   return res.data;
 };
 
-export const updateDetail = async (username, data) => {
+export const updateProfile = async (token, data) => {
   if (data.firstname === "" || data.lastname === "")
     alert("Please fill all the details.");
   else {
-    const res = await axios.post("/updateUser", {
-      username: username,
-      firstname: data.firstname,
-      lastname: data.lastname,
+    const res = await axios.post("/updateuser", data, {
+      headers: { Authorization: "Bearer " + token },
     });
     if (res.data === -1) alert("Oops! Something went worng.");
     else {
@@ -24,12 +22,14 @@ export const updateDetail = async (username, data) => {
   }
 };
 
-export const updatePass = async (username, data) => {
+export const updatePass = async (token, data) => {
   if (data.oldpass === "" || data.newpass === "" || data.cpass === "")
     alert("Please fill all the details.");
   else {
-    axios
-      .post("/getInfo", { username: username })
+    await axios
+      .get("/profile", {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((res) => {
         if (res.data === "error") alert("Oops! Something went worng.");
         else if (data.oldpass !== res.data.password)
@@ -39,14 +39,19 @@ export const updatePass = async (username, data) => {
         else if (data.newpass !== data.cpass)
           alert("Confirm password must be same.");
         else {
-          const res = axios.post("/updateUser", {
-            username: username,
-            password: data.newpass,
-          });
+          const res = axios.post(
+            "/updateuser",
+            {
+              password: data.newpass,
+            },
+            {
+              headers: { Authorization: "Bearer " + token },
+            }
+          );
           if (res.data === -1) alert("Oops! Something went worng.");
           else {
             alert("Password updated.");
-            localStorage.removeItem("username");
+            localStorage.removeItem("splitterToken");
             window.location.href = "/login";
           }
         }

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getExp, deleteExp } from "../../services/expense";
 
-export default function ExpenseList() {
-  const username = localStorage.getItem("username");
-  const [more, setmore] = useState(false);
+export default function ExpenseList(props) {
   const [expense, setexpense] = useState([]);
 
   const handleDelete = (e) => {
-    deleteExp({ tID: e.target.value });
+    deleteExp(props.token,{ tID: e.target.value });
   };
 
   const month = {
@@ -27,11 +25,11 @@ export default function ExpenseList() {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getExp({ username: username });
+      const data = await getExp(props.token,{});
       data && setexpense(data);
     };
     getData();
-  }, [username]);
+  }, [props.token]);
 
   return (
     <>

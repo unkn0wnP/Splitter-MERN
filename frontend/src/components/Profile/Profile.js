@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-  getCurrentDetails,
-  updateDetail,
+  getProfile,
+  updateProfile,
   updatePass,
 } from "../../services/profile";
 import Navbar from "./Navbar";
 
 export default function Profile() {
-  const uname = localStorage.getItem("username");
 
   const [currentDetails, setcurrentDetails] = useState({});
   const [updateDetails, setupdateDetails] = useState({});
@@ -17,15 +16,20 @@ export default function Profile() {
   const [edit, setedit] = useState(false);
   const [cpass, setcpass] = useState(false);
 
+  const token = localStorage.getItem("splitterToken");
+
   useEffect(() => {
+
+    if (token === null) window.location.href = "/login";
+
     const detail = async () => {
-      const res = await getCurrentDetails(uname);
+      const res = await getProfile(token);
       res && setcurrentDetails(res);
       setupdateDetails({ firstname: res.firstname, lastname: res.lastname });
       setupdatepass({ oldpass: "", newpass: "", cpass: "" });
     };
     detail();
-  }, []);
+  }, [token]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,14 +42,14 @@ export default function Profile() {
   };
 
   const handleUpdateDetails = () => {
-    updateDetail(uname, {
+    updateProfile(token, {
       firstname: updateDetails.firstname.trim(),
       lastname: updateDetails.lastname.trim(),
     });
   };
 
   const handleUpdatePass = () => {
-    updatePass(uname, {
+    updatePass(token, {
       oldpass: updatepass.oldpass.trim(),
       newpass: updatepass.newpass.trim(),
       cpass: updatepass.cpass.trim(),
@@ -54,7 +58,7 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar username={uname} />
+      <Navbar username={currentDetails.username} />
 
       <div className="row mx-0">
         <div className="col-sm-4 card bg-dark mt-5" style={{borderRadius:0}}>

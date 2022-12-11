@@ -5,7 +5,7 @@ export default function ExpenseList(props) {
   const data = props.data;
 
   const handleDelete = (e) => {
-    deleteExp({tID : e.target.value});
+    deleteExp(props.token,{tID : e.target.value});
   };
 
   const month = {

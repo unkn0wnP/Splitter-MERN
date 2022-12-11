@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Alert from "../Alert/Alert";
 import Register from "./Register";
 
 export default function Index() {
   const [alert, setAlert] = useState(null);
+
+  const token = localStorage.getItem("splitterToken");
+
+  useEffect(() => {
+    if (token) window.location.href = "/dashboard";
+  }, []);
 
   const showAlert = (msg, type) => {
     setAlert({ msg: msg, type: type });
