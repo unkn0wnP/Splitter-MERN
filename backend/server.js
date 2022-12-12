@@ -16,7 +16,7 @@ app.use("/",Router)
 
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 app.get("*", (request, response) => {
-  response.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+  response.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
