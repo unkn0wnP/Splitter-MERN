@@ -1,4 +1,7 @@
 const axios = require("axios");
+const config = require("../Config/const")
+
+const API_URL = config.URL
 
 const dformate = (date) => {
   let d = new Date();
@@ -32,7 +35,7 @@ export const addExp = async (token, data) => {
   else {
     
     const res = await axios
-      .post("/getfriend",{}, {
+      .post(API_URL+"/getfriend",{}, {
         headers: { Authorization: "Bearer " + token },
       })
       
@@ -58,7 +61,7 @@ export const addExp = async (token, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("/addexpense", record, {
+            axios.post(API_URL+"/addexpense", record, {
               headers: { Authorization: "Bearer " + token },
             });
             record = {
@@ -72,7 +75,7 @@ export const addExp = async (token, data) => {
               tDate: tDate,
             };
             axios
-              .post("/addexpense", record, {
+              .post(API_URL+"/addexpense", record, {
                 headers: { Authorization: "Bearer " + token },
               })
               .then((res1) => {
@@ -92,7 +95,7 @@ export const addExp = async (token, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("/addexpense", record, {
+            axios.post(API_URL+"/addexpense", record, {
               headers: { Authorization: "Bearer " + token },
             });
             record = {
@@ -106,7 +109,7 @@ export const addExp = async (token, data) => {
               tDate: tDate,
             };
             axios
-              .post("/addexpense", record, {
+              .post(API_URL+"/addexpense", record, {
                 headers: { Authorization: "Bearer " + token },
               })
               .then((res) => {
@@ -126,7 +129,7 @@ export const addExp = async (token, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("/addexpense", record, {
+            axios.post(API_URL+"/addexpense", record, {
               headers: { Authorization: "Bearer " + token },
             });
             record = {
@@ -140,7 +143,7 @@ export const addExp = async (token, data) => {
               tDate: tDate,
             };
             axios
-              .post("/addexpense", record, {
+              .post(API_URL+"/addexpense", record, {
                 headers: { Authorization: "Bearer " + token },
               })
               .then((res) => {
@@ -160,7 +163,7 @@ export const addExp = async (token, data) => {
               tID: tID,
               tDate: tDate,
             };
-            axios.post("/addexpense", record, {
+            axios.post(API_URL+"/addexpense", record, {
               headers: { Authorization: "Bearer " + token },
             });
             record = {
@@ -174,7 +177,7 @@ export const addExp = async (token, data) => {
               tDate: tDate,
             };
             axios
-              .post("/addexpense", record, {
+              .post(API_URL+"/addexpense", record, {
                 headers: { Authorization: "Bearer " + token },
               })
               .then((res) => {
@@ -195,13 +198,13 @@ export const getExpTotal = async (token,data) => {
     alert("Please fill all the details.");
     total = -1;
   } else {
-    const res = await axios.post("/getsummary", data,{
+    const res = await axios.post(API_URL+"/getsummary", data,{
       headers: { Authorization: "Bearer " + token },
     });
 
     if (res.data.length === 0) {
       await axios
-        .post("/getfriend", {
+        .post(API_URL+"/getfriend", {
           headers: { Authorization: "Bearer " + token },
         },{})
         .then((res) => {
@@ -242,7 +245,7 @@ export const settleExp = async (token,data, amount) => {
     tID: tID,
     tDate: tDate,
   };
-  await axios.post("/addexpense", record,{
+  await axios.post(API_URL+"/addexpense", record,{
     headers: { Authorization: "Bearer " + token },
   });
 
@@ -256,7 +259,7 @@ export const settleExp = async (token,data, amount) => {
     tID: tID,
     tDate: tDate,
   };
-  await axios.post("/addexpense", record,{
+  await axios.post(API_URL+"/addexpense", record,{
     headers: { Authorization: "Bearer " + token },
   }).then((res) => {
     if (res.data === 1) {
@@ -267,7 +270,7 @@ export const settleExp = async (token,data, amount) => {
 };
 
 export const getSummaryFriend = async (token,data) => {
-  const res = await axios.post("/getsummary", data,{
+  const res = await axios.post(API_URL+"/getsummary", data,{
     headers: { Authorization: "Bearer " + token },
   });
   let lent = [];
@@ -282,7 +285,7 @@ export const getSummaryFriend = async (token,data) => {
 export const getSummary = async (token,data) => {
   let owe = 0;
   let lent = 0;
-  let d = await axios.post("/getsummary", data,{
+  let d = await axios.post(API_URL+"/getsummary", data,{
     headers: { Authorization: "Bearer " + token },
   });
   d.data.map((e) => {
@@ -293,7 +296,7 @@ export const getSummary = async (token,data) => {
 };
 
 export const deleteExp = async (token,data) => {
-  const res = await axios.post("/deleteexp", data,{
+  const res = await axios.post(API_URL+"/deleteexp", data,{
     headers: { Authorization: "Bearer " + token },
   });
   if (res.data === "Deleted") {
@@ -303,7 +306,7 @@ export const deleteExp = async (token,data) => {
 };
 
 export const getExp = async (token,data) => {
-  const res = await axios.post("/getexpense", data,{
+  const res = await axios.post(API_URL+"/getexpense", data,{
     headers: { Authorization: "Bearer " + token },
   });
   return res.data.data;

@@ -1,7 +1,10 @@
 const axios = require("axios");
+const config = require("../Config/const")
+
+const API_URL = config.URL
 
 export const getProfile = async (token) => {
-  const res = await axios.get("/profile", {
+  const res = await axios.get(API_URL+"/profile", {
     headers: { Authorization: "Bearer " + token },
   });
   return res.data;
@@ -11,7 +14,7 @@ export const updateProfile = async (token, data) => {
   if (data.firstname === "" || data.lastname === "")
     alert("Please fill all the details.");
   else {
-    const res = await axios.post("/updateuser", data, {
+    const res = await axios.post(API_URL+"/updateuser", data, {
       headers: { Authorization: "Bearer " + token },
     });
     if (res.data === -1) alert("Oops! Something went worng.");
@@ -27,7 +30,7 @@ export const updatePass = async (token, data) => {
     alert("Please fill all the details.");
   else {
     await axios
-      .get("/profile", {
+      .get(API_URL+"/profile", {
         headers: { Authorization: "Bearer " + token },
       })
       .then((res) => {
@@ -40,7 +43,7 @@ export const updatePass = async (token, data) => {
           alert("Confirm password must be same.");
         else {
           const res = axios.post(
-            "/updateuser",
+            API_URL+"/updateuser",
             {
               password: data.newpass,
             },
