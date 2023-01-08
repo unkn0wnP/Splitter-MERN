@@ -1,5 +1,8 @@
 const nodemailer = require("nodemailer")
 require("dotenv").config();
+const config = require("../Config/const")
+
+const URL = config.EMAIL_URL
 
 const transport = nodemailer.createTransport({
     service: "Gmail",
@@ -17,7 +20,7 @@ module.exports.sendConfirmationMail = (usernmae,to,confirmationcode)=>{
         html:`<h1>Email Confirmation</h1>
         <h2>Hello ${usernmae}</h2>
         <p>Please confirm your email by clicking on the following link</p>
-        <a href=http://localhost:3001/verify/${confirmationcode}> Click here</a>`
+        <a href="${URL}/verify/${confirmationcode}"> Click here</a>`
     })
     .catch((error) => {
         console.log(error)
