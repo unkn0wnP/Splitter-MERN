@@ -9,6 +9,7 @@ import PendingR from "./components/Dashboard/PendingR";
 import FriendDetail from "./components/Dashboard/FriendDetail";
 import Error from "./components/Error";
 import PageNotFound from "./components/PageNotFound";
+import Confirmation from "./components/Confirmation";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="pendingRequest" element={<PendingR />}></Route>
             <Route path=":friendID" element={<FriendDetail />}></Route>
           </Route>
+          <Route path="/verify/:confirmationcode" element={<Confirmation />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/error" element={<Error />} />
           <Route path="*" element={<PageNotFound />}/>

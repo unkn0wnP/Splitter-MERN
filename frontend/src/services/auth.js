@@ -1,4 +1,7 @@
 const axios = require("axios");
+const config = require("../Config/const")
+
+const API_URL = config.URL
 
 export const authRegister = async (data, showAlert) => {
   if (
@@ -17,16 +20,27 @@ export const authRegister = async (data, showAlert) => {
   else if (data.pass !== data.pass2)
     showAlert("Confirm password must be same.", "danger");
   else {
+    //create confirmation code
+    var code = "";
+    const characters =
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (let i = 0; i < 25; i++) {
+      code += characters[Math.floor(Math.random() * characters.length)];
+    }
+
     const udata = {
       username: data.username,
       lastname: data.lastname,
       firstname: data.firstname,
       email: data.email,
       password: data.pass,
+      register_time: new Date(),
+      confirmationcode: code,
     };
     await axios
-      .post("/register", udata)
+      .post(API_URL+"/register", udata)
       .then((res) => {
+        showAlert("Check mail for account verification.", "info");
         window.location.href = "/login";
       })
       .catch((error) => {
@@ -40,7 +54,7 @@ export const authLogin = async (data, showAlert) => {
     showAlert("Please fill all the details.", "danger");
   else {
     await axios
-      .post("/login", {
+      .post(API_URL+"/login", {
         username: data.username,
         password: data.password,
       })
@@ -52,4 +66,10 @@ export const authLogin = async (data, showAlert) => {
         showAlert(error.response.data, "danger");
       });
   }
+};
+
+export const verifyUser = async (code) => {
+  await axios.get(API_URL+"/verify/" + code).then((res) => {
+    return res.data;
+  });
 };

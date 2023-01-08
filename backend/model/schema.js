@@ -24,6 +24,22 @@ const user = new mongoose.Schema({
     password:{
         type: String,
         required: true
+    },
+
+    confirmationcode:{
+        type: String,
+        unique: true
+    },
+
+    status:{
+        type: String,
+        enum: ['Pending','Active'],
+        default: 'Pending'
+    },
+
+    register_time:{
+        type: Date,
+        required: true  
     }
 })
 

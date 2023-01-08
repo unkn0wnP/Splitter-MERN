@@ -1,4 +1,7 @@
 const axios = require("axios");
+const config = require("../Config/const")
+
+const API_URL = config.URL
 
 export const sendRequest = async (token, data) => {
   const fname = data.friend.trim();
@@ -7,7 +10,7 @@ export const sendRequest = async (token, data) => {
   else {
     axios
       .post(
-        "/getfriend",
+        API_URL+"/getfriend",
         {},
         {
           headers: { Authorization: "Bearer " + token },
@@ -23,7 +26,7 @@ export const sendRequest = async (token, data) => {
         else {
           axios
             .post(
-              "/getuser",
+              API_URL+"/getuser",
               {
                 username: fname,
               },
@@ -39,7 +42,7 @@ export const sendRequest = async (token, data) => {
               else {
                 axios
                   .post(
-                    "/getfriend",
+                    API_URL+"/getfriend",
                     { username: fname },
                     {
                       headers: { Authorization: "Bearer " + token },
@@ -57,7 +60,7 @@ export const sendRequest = async (token, data) => {
                       p1.push(uname);
                       axios
                         .post(
-                          "/sendfriendrequest",
+                          API_URL+"/sendfriendrequest",
                           {
                             friend: fname,
                             pending: p1,
@@ -84,7 +87,7 @@ export const sendRequest = async (token, data) => {
 export const addFriend = async (token, uname, fname) => {
   axios
     .post(
-      "/getfriend",
+      API_URL+"/getfriend",
       {},
       {
         headers: { Authorization: "Bearer " + token },
@@ -97,7 +100,7 @@ export const addFriend = async (token, uname, fname) => {
       p.pop(fname);
       axios
         .post(
-          "/updatefriend",
+          API_URL+"/updatefriend",
           {
             username: uname,
             friends: f,
@@ -111,7 +114,7 @@ export const addFriend = async (token, uname, fname) => {
           if (res1.data === 1) {
             axios
               .post(
-                "/getfriend",
+                API_URL+"/getfriend",
                 { username: fname },
                 {
                   headers: { Authorization: "Bearer " + token },
@@ -122,7 +125,7 @@ export const addFriend = async (token, uname, fname) => {
                 f1.push(uname);
                 axios
                   .post(
-                    "/updatefriend",
+                    API_URL+"/updatefriend",
                     {
                       username: fname,
                       friends: f1,
@@ -147,7 +150,7 @@ export const addFriend = async (token, uname, fname) => {
 
 export const getFriendData = async (token) => {
   const res = await axios.post(
-    "/getfriend",
+    API_URL+"/getfriend",
     {},
     { headers: { Authorization: "Bearer " + token } }
   );
@@ -157,7 +160,7 @@ export const getFriendData = async (token) => {
 
 export const isFriend = async (token, fname) => {
   const res = await axios.post(
-    "/getfriend",
+    API_URL+"/getfriend",
     {},
     {
       headers: { Authorization: "Bearer " + token },

@@ -1,8 +1,28 @@
 const express = require("express");
 const Router = express.Router();
 const jwt = require("jsonwebtoken");
+const { sendConfirmationMail } = require("../../frontend/src/services/email");
 const model = require("../model/schema");
+
 require("dotenv").config();
+
+//email confirmation
+Router.get("/verify/:confirmationcode", async (req, res) => {
+  const data = await model.User.findOne({
+    confirmationcode: req.params.confirmationcode,
+  });
+
+  if (!data) {
+    res.status(404).json("user not found.");
+  } else {
+    data.status = "Active";
+    data.save((err) => {
+      if (err) {
+        res.status(500).json(err);
+      }
+    });
+  }
+});
 
 //register
 Router.post("/register", async (req, res) => {
@@ -12,6 +32,12 @@ Router.post("/register", async (req, res) => {
   if (data !== 0) {
     res.status(400).json("Username or Email is already in use.");
   } else {
+    sendConfirmationMail(
+      req.body.username,
+      req.body.email,
+      req.body.confirmationcode
+    );
+
     const newUser = new model.User(req.body);
     await newUser.save();
 
@@ -35,6 +61,10 @@ Router.post("/login", async (req, res) => {
 
   if (data == null) {
     res.status(400).json("User not found.");
+  } else if (data.status !== "Active") {
+    res
+      .status(400)
+      .json("Account verification is pending. Please Verify Your Email!");
   } else if (req.body.password !== data.password) {
     res.status(400).json("Invalid password.");
   } else {
