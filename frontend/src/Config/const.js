@@ -1,4 +1,4 @@
-const URL = "http://localhost:3001"
-const EMAIL_URL = "http://localhost:3000"
+const URL = ""
+const EMAIL_URL = ""
 
 module.exports = {URL,EMAIL_URL};
