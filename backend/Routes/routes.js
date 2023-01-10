@@ -1,7 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
 const { sendConfirmationMail } = require("../../frontend/src/services/email");
 const model = require("../model/schema");
 
@@ -39,10 +39,10 @@ Router.post("/register", async (req, res) => {
       req.body.confirmationcode
     );
 
-    let userData = req.body
+    let userData = req.body;
 
-    const salt = await bcrypt.genSalt(10)
-    userData.password = await bcrypt.hash(userData.password,salt)
+    const salt = await bcrypt.genSalt(10);
+    userData.password = await bcrypt.hash(userData.password, salt);
 
     const newUser = new model.User(userData);
     await newUser.save();
@@ -72,27 +72,17 @@ Router.post("/login", async (req, res) => {
       .status(400)
       .json("Account verification is pending. Please Verify Your Email!");
   } else {
-    const validCred = await bcrypt.compare(req.body.password,data.password)
-    if(!validCred)
-    {
+    const validCred = await bcrypt.compare(req.body.password, data.password);
+    if (!validCred) {
       res.status(400).json("Invalid password.");
     } else {
       const user = { username: req.body.username };
-  
+
       //JSON web token
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
       res.json({ accessToken: accessToken });
     }
   }
-  // if (req.body.password !== data.password) {
-  //   res.status(400).json("Invalid password.");
-  // } else {
-  //   const user = { username: req.body.username };
-
-  //   //JSON web token
-  //   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
-  //   res.json({ accessToken: accessToken });
-  // }
 });
 
 //Profile
@@ -102,6 +92,30 @@ Router.get("/profile", authenticateToken, async (req, res) => {
   const data = await model.User.findOne({ username: username });
 
   res.status(200).json(data);
+});
+
+//update user password
+Router.post("/updatepassword", authenticateToken, async (req, res) => {
+  const username = req.user.username;
+
+  const data = await model.User.findOne({ username: username });
+
+  const validCred = await bcrypt.compare(req.body.password, data.password);
+  if (!validCred) {
+    res.status(400).json("Incorrect current password.");
+  } else {
+    const salt = await bcrypt.genSalt(10);
+    const newPass = await bcrypt.hash(req.body.newpassword, salt);
+
+    const update = { $set: { password: newPass } };
+     model.User.updateOne({ username: username }, update, (err, result) => {
+      if (err) {
+        res
+          .status(400)
+          .json("Something went wrong!!!\nFailed to update password.");
+      } else res.status(200).json("Password updated successfully.");
+    });
+  }
 });
 
 //update user profile
