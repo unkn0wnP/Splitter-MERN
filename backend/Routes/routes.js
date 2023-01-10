@@ -1,6 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs")
 const { sendConfirmationMail } = require("../../frontend/src/services/email");
 const model = require("../model/schema");
 
@@ -38,7 +39,12 @@ Router.post("/register", async (req, res) => {
       req.body.confirmationcode
     );
 
-    const newUser = new model.User(req.body);
+    let userData = req.body
+
+    const salt = await bcrypt.genSalt(10)
+    userData.password = await bcrypt.hash(userData.password,salt)
+
+    const newUser = new model.User(userData);
     await newUser.save();
 
     //create friend
@@ -65,15 +71,28 @@ Router.post("/login", async (req, res) => {
     res
       .status(400)
       .json("Account verification is pending. Please Verify Your Email!");
-  } else if (req.body.password !== data.password) {
-    res.status(400).json("Invalid password.");
   } else {
-    const user = { username: req.body.username };
-
-    //JSON web token
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
-    res.json({ accessToken: accessToken });
+    const validCred = await bcrypt.compare(req.body.password,data.password)
+    if(!validCred)
+    {
+      res.status(400).json("Invalid password.");
+    } else {
+      const user = { username: req.body.username };
+  
+      //JSON web token
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
+      res.json({ accessToken: accessToken });
+    }
   }
+  // if (req.body.password !== data.password) {
+  //   res.status(400).json("Invalid password.");
+  // } else {
+  //   const user = { username: req.body.username };
+
+  //   //JSON web token
+  //   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN);
+  //   res.json({ accessToken: accessToken });
+  // }
 });
 
 //Profile
